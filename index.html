@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="styles/style.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<title>自分の好き度が分かる！</title>
+<style>
+	h1{
+	  	  margin: 0;
+		  padding: 0;
+		  text-align: center;
+		  padding-top: 10px;
+	  }
+	  h2{
+		color: rgb(83, 0, 0);"
+	  }
+	  p{
+		  margin: 0;
+		  padding: 10;
+	  }
+	  body{
+	  	  background-color: #ff00dd;
+	  }
+	  img{
+	  	  width: 100%;
+		  height: auto;
+	  }
+	  p:nth-of-type(2){
+	  	  display: none;
+	  }
+</style>
+</head>
+<body>
+<h1 style="color: rgb(83, 0, 0);"><span><img src="images/heart.png"alt="heart"style="width:45px;height:40px;vertical-align:middle;"></span>あなたの好き度診断<span><img src="images/heart.png"alt="heart"style="width:45px;height:40px;vertical-align:middle;"></span></h1>
+<h4 style="text-align:center;margin-top:0px;color: maroon;">質問に答えるだけであなたの好き度がわかっちゃう！</h4>
+<hr style= "border:none;border-top:dashed 5px #ff0000;height:1px;color:#FFFFFF;">
+
+<h2 >質問</h2>
+<div id="text_q"></div>
+<h2>選択</h2>
+<div id="text_s"></div>
+<h2>回答</h2>
+<div id="text_a"></div>
+
+<script type="text/javascript">
+//問題と解答
+qa = new Array();
+qa[0] = ["自分は好きですか？","存在が無理","嫌い","好き","鏡の自分と話すことがある",0,10,20,30];
+qa[1] = ["１回の着替えにかける時間はどのくらい？","5分以内に終わる","15分くらい","30分くらい","1時間以上",0,10,20,30];
+qa[2] = ["あなたにとってバレンタインorホワイトデーとは？","みんながそうしているからそうする","相手を想うもの","見返りを求めるもの","渡す自分イケイケっす",0,10,20,30];
+qa[3] = ["悲しそうな顔をしてる人がいます。どうしますか？","見捨てる","黙って見つめる","悲しんでいる理由を聞く","優しく接する自分に自惚れる",0,10,20,30];
+qa[4] = ["相手の髪型が非常にダサい。どうしますか？","ニヤニヤしながら写真を撮る","黙ってその場をやり過ごす","はっきりと指摘する","今の自分と同じ髪型にする",0,10,20,30];
+qa[5] = ["とある場所に旅行にきた、何を買おう？","食べ物","キーホルダー","服","鏡",0,10,20,30];
+qa[6] = ["相手の趣味が変わっています。どう対応しますか？","否定し興味すら持たない","否定する","興味を示すふりをする","自分の趣味を押し付ける",0,10,20,30];
+qa[7] = ["今日が地球最後の日です。何をしますか？","誰かと一緒にいる","何もしない","罪を犯す","自分の好きなことをする",0,10,20,30];
+qa[8] = ["友達と明日でお別れ。どうする？","そもそも友達がいない","その人に会いに行く","何もしない","関係ない、一人で過ごす。",0,10,20,30];
+qa[9] = ["裏切られました","殺害計画を立てる","ネットにさらす","時間が解決してくれるのを待つ","好きなことをして自分で自分を慰める",0,10,20,30];
+
+//初期設定
+q_sel = 4; //選択肢の数
+
+setReady();
+
+//初期設定
+function setReady() {
+	count = 0; //問題番号
+	ansers = new Array(); //解答記録
+	
+	//最初の問題
+	quiz();
+}
+
+//問題表示
+function quiz() {
+	var s, n;
+	//問題
+	document.getElementById("text_q").innerHTML = "設問" + (count + 1) + "：" + qa[count][0];
+	//選択肢
+	s = "";
+	for (n=1;n<=q_sel;n++) {
+		if (qa[count][n] != "") {
+			s += "【<a href='javascript:anser(" + n + ")'>" + n + "：" + qa[count][n] + "</a>】";
+		}
+	}
+	document.getElementById("text_s").innerHTML = s;
+}
+
+//解答表示
+function anser(num) {
+	var s;
+	s = "設問" + (count + 1) + "：";
+	//答え合わせ
+	ansers[count] = qa[count][num+q_sel];
+	s = qa[count][num] + "(" + qa[count][num+q_sel] + "点)";
+	document.getElementById("text_a").innerHTML = s;
+	
+	//次の問題を表示
+	count++;
+	if (count < qa.length) {
+		quiz();
+	} else {
+		
+		s = "<table border='2'><caption>自分大好き度診断結果</caption>";
+		
+		s += "<tr><th>設問</th>";
+		for (n=0;n<qa.length;n++) {
+			s += "<th>" + (n+1) + "</th>";
+		}
+		s += "<th>合計</th></tr>";
+		
+		s += "<tr><th>回答</th>";
+		var total = 0;
+		for (n=0;n<qa.length;n++) {
+			s += "<td>" + ansers[n] + "</td>";
+			total += eval(ansers[n]);
+		}
+		s += "<td>" + total + "</td></tr>";
+		s += "</table>";
+		s += "<b>合計点</b>";
+		s += "<a><br>50点以下 : 自分が嫌いなのかい？両親はどう思うかな？</a>";
+		s += "<a><br>60点以上120点以下 : たまには自分を見つめなおしてみたら？。</a>";
+		s += "<a><br>130点以上230点以下 : あなたのことがあなたがきっと心のどこかにいます。</a>";
+		s += "<a><br>240点以上280点以下 : 自分が大好き。自分に自信を持ちましょう。</a>";
+		s += "<a><br>290点以上 : ひとたび目が合えばあなたはあなたの虜です。</a>";
+		document.getElementById("text_q").innerHTML = s;
+		
+		s = "【<a href='javascript:history.back()'>前のページに戻る</a>】";
+		s += "【<a href='javascript:setReady()'>同じ問題を最初から</a>】";
+		s += "【<a href=''>次の問題に進む</a>】";
+		document.getElementById("text_s").innerHTML = s;
+	}
+}
+</script>
+</body>
+</html>
